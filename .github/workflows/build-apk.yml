@@ -1,0 +1,33 @@
+name: Build Yabiso APK
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - name: Build APK
+        run: |
+          npm init -y
+          npm install @capacitor/core @capacitor/cli @capacitor/android
+          npx cap init "Yabiso SERVICES" com.yabiso.services --web-dir=www
+          mkdir -p www
+          echo '<html><head><meta http-equiv="refresh" content="0; url=https://yabiso-services-supe-xg7w.bolt.host"></head><body>Chargement Yabiso...</body></html>' > www/index.html
+          echo '{"appId":"com.yabiso.services","appName":"Yabiso SERVICES","webDir":"www","server":{"url":"https://yabiso-services-supe-xg7w.bolt.host","cleartext":true}}' > capacitor.config.json
+          npx cap add android
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Yabiso-APK
+          path: android/app/build/outputs/apk/debug/app-debug.apk
