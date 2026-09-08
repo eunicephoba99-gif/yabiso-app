@@ -18,9 +18,11 @@ jobs:
           npm install @capacitor/core @capacitor/cli @capacitor/android
           npx cap init "Yabiso SERVICES" com.yabiso.services --web-dir=www
           mkdir -p www
-          echo "<h1>Yabiso SERVICES</h1>" > www/index.html
+          echo "<h1>Yabiso SERVICES - Kinshasa</h1>" > www/index.html
           npx cap add android
-          cd android && chmod +x gradlew &&./gradlew assembleDebug
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
